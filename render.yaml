@@ -1,0 +1,13 @@
+# Render Blueprint. On Render: New + → Blueprint → connect this repo.
+# DATABASE_URL is left unset here (sync: false) so you can paste your free
+# Neon/Supabase Postgres connection string into the dashboard.
+services:
+  - type: web
+    name: whatsapp-visit-tracker
+    runtime: docker
+    plan: free
+    region: singapore
+    healthCheckPath: /health
+    envVars:
+      - key: DATABASE_URL
+        sync: false
