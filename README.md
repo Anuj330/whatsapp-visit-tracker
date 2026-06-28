@@ -42,7 +42,7 @@ The **phone number is the key** (one record per number). `group_id` is
 **optional**, so `/visits/check` doubles as get-or-create:
 
 - **phone only** → look up / register the number (a pure read for known
-  numbers, or registers a new one). `group_ids` is `null` if no groups saved.
+  numbers, or registers a new one). `group_id` is `null` if no groups saved.
 - **phone + group_id** → also record that group (region). A number accumulates
   every group it is sent with.
 
@@ -63,7 +63,7 @@ curl -s -X POST http://127.0.0.1:8000/visits/check \
 {
   "phone": "+14155550100",
   "is_returning": false,
-  "group_ids": null,
+  "group_id": null,
   "first_seen_at": "2026-06-24T12:00:00+00:00",
   "last_seen_at": "2026-06-24T12:00:00+00:00",
   "visit_count": 1
@@ -82,14 +82,14 @@ curl -s -X POST http://127.0.0.1:8000/visits/check \
 {
   "phone": "+14155550100",
   "is_returning": true,
-  "group_ids": "north",
+  "group_id": "north",
   "first_seen_at": "2026-06-24T12:00:00+00:00",
   "last_seen_at": "2026-06-24T12:00:30+00:00",
   "visit_count": 2
 }
 ```
 
-Sending another new `group_id` (e.g. `"south"`) accumulates it, so `group_ids`
+Sending another new `group_id` (e.g. `"south"`) accumulates it, so `group_id`
 becomes `"north,south"`. Re-sending an existing (phone, group_id) pair is
 idempotent — the region list does not grow, but `visit_count` still increments
 on every call (phone-only calls included).

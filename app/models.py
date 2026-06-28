@@ -95,7 +95,7 @@ class UserResponse(BaseModel):
 
     phone: str
     # Comma-separated groups (regions), e.g. "g1,g2"; null if none are saved.
-    group_ids: str | None
+    group_id: str | None
     first_seen_at: datetime
     last_seen_at: datetime
     visit_count: int
@@ -105,13 +105,13 @@ class VisitCheckResponse(BaseModel):
     """Response body for POST /visits/check.
 
     ``is_returning`` is false for a brand-new number and true if the phone was
-    already in the database. ``group_ids`` is a comma-separated string of every
+    already in the database. ``group_id`` is a comma-separated string of every
     group (region) the number is saved to, or null if none are saved yet.
     """
 
     phone: str
     is_returning: bool
-    group_ids: str | None
+    group_id: str | None
     first_seen_at: datetime
     last_seen_at: datetime
     visit_count: int

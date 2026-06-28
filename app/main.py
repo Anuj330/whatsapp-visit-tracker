@@ -122,7 +122,7 @@ def check_visit(
     return VisitCheckResponse(
         phone=payload.phone,
         is_returning=user_row.visit_count > 1,
-        group_ids=group_ids,
+        group_id=group_ids,
         first_seen_at=_as_utc(user_row.first_seen_at),
         last_seen_at=_as_utc(user_row.last_seen_at),
         visit_count=user_row.visit_count,
@@ -133,7 +133,7 @@ def _to_user_response(session: Session, user: User) -> UserResponse:
     """Build a UserResponse, attaching the phone's comma-separated regions."""
     return UserResponse(
         phone=user.phone,
-        group_ids=_group_ids_for(session, user.phone),
+        group_id=_group_ids_for(session, user.phone),
         first_seen_at=_as_utc(user.first_seen_at),
         last_seen_at=_as_utc(user.last_seen_at),
         visit_count=user.visit_count,
