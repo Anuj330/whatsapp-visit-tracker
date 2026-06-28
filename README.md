@@ -30,40 +30,47 @@ The API listens on `http://127.0.0.1:8000`. Interactive docs are at
 
 ## Endpoints
 
-| Method | Path             | Description                                  |
-| ------ | ---------------- | -------------------------------------------- |
-| POST   | `/visits/check`  | Record a visit; reports if the user is new.  |
-| GET    | `/users/{phone}` | Fetch a stored user record (404 if missing). |
-| GET    | `/health`        | Liveness probe.                              |
+| Method | Path                       | Description                                  |
+| ------ | -------------------------- | -------------------------------------------- |
+| POST   | `/visits/check`            | Record a visit; reports if the user is new.  |
+| GET    | `/users/{phone_group_id}`  | Fetch a stored user record (404 if missing). |
+| GET    | `/health`                  | Liveness probe.                              |
+
+A user is keyed per group by `phone_group_id = "{phone}_{group_id}"`, so the
+same phone number is tracked independently in each WhatsApp group.
 
 ### Example: POST /visits/check
 
 ```bash
 curl -s -X POST http://127.0.0.1:8000/visits/check \
   -H "Content-Type: application/json" \
-  -d '{"phone": "+14155550100"}'
+  -d '{"phone": "+14155550100", "group_id": "120363000@g.us"}'
 ```
 
 First call:
 
 ```json
 {
+  "phone_group_id": "+14155550100_120363000@g.us",
   "phone": "+14155550100",
+  "group_id": "120363000@g.us",
   "is_returning": false,
-  "first_seen_at": "2026-06-23T12:00:00+00:00",
-  "last_seen_at": "2026-06-23T12:00:00+00:00",
+  "first_seen_at": "2026-06-24T12:00:00+00:00",
+  "last_seen_at": "2026-06-24T12:00:00+00:00",
   "visit_count": 1
 }
 ```
 
-Call it again with the same phone and `is_returning` becomes `true`,
-`visit_count` increments, and `last_seen_at` advances.
+Call it again with the same `phone` and `group_id` and `is_returning` becomes
+`true`, `visit_count` increments, and `last_seen_at` advances. The same phone
+with a different `group_id` is treated as a new user.
 
 The write is performed as a single `INSERT ... ON CONFLICT DO UPDATE`, so two
 simultaneous first-hits from the same number cannot double-create the row.
 
 The `phone` field is normalized: whitespace is stripped and a single leading
-`+` is preserved. An empty or non-string `phone` yields a `422` response.
+`+` is preserved. Both `phone` and `group_id` must be non-empty strings, else
+the request yields a `422` response.
 
 ## Tests
 

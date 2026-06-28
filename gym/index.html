@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Forge — Strength &amp; Conditioning</title>
+<meta name="description" content="Barbell strength, brutal conditioning, and a room full of people who show up. 12,000 square feet of iron in the heart of the city.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{ --ac:#ff4d12; }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:#0a0a0b}
+  body{font-family:'Archivo',system-ui,sans-serif;color:#F4F1EC;-webkit-font-smoothing:antialiased}
+  a{color:inherit}
+  @keyframes mq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(7px)}}
+  ::selection{background:var(--ac);color:#0a0a0b}
+
+  /* hover / focus states (replacing DC style-hover / style-focus) */
+  .nav-link{color:#b8b3aa;text-decoration:none;transition:color .15s ease}
+  .nav-link:hover{color:#fff}
+  .btn-accent{transition:filter .15s ease}
+  .btn-accent:hover{filter:brightness(1.1)}
+  .btn-ghost{transition:border-color .15s ease,background .15s ease}
+  .btn-ghost:hover{border-color:#fff;background:rgba(255,255,255,.06)}
+  .foot-link{color:#b8b3aa;text-decoration:none;transition:color .15s ease}
+  .foot-link:hover{color:#fff}
+  .email-input{transition:border-color .15s ease}
+  .email-input:focus{border-color:var(--ac)}
+
+  /* image placeholders (replacing DC x-import image-slot) */
+  .img-slot{display:flex;align-items:center;justify-content:center;text-align:center;
+    color:#6c6760;font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+    padding:14px;background:
+      linear-gradient(135deg,rgba(255,77,18,.08),transparent 60%),
+      repeating-linear-gradient(45deg,#161619,#161619 12px,#1b1b1f 12px,#1b1b1f 24px)}
+</style>
+</head>
+<body>
+
+<div id="page" style="position:relative;background:#0a0a0b;min-height:100vh">
+
+  <!-- GRAIN TEXTURE -->
+  <div style="position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:.06;mix-blend-mode:soft-light;background-image:url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E&quot;)"></div>
+
+  <!-- NAV -->
+  <header style="position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:18px clamp(20px,5vw,64px);background:rgba(10,10,11,.72);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.08)">
+    <a href="#top" style="display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit">
+      <span style="width:26px;height:26px;background:var(--ac);transform:rotate(45deg);box-shadow:0 0 18px rgba(255,77,18,.5)"></span>
+      <span style="font-family:'Anton';font-size:22px;letter-spacing:.04em;text-transform:uppercase">The Forge</span>
+    </a>
+    <nav style="display:flex;align-items:center;gap:30px">
+      <a href="#programs" class="nav-link" style="font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase">Programs</a>
+      <a href="#coaches" class="nav-link" style="font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase">Coaches</a>
+      <a href="#membership" class="nav-link" style="font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase">Membership</a>
+      <a href="#results" class="nav-link" style="font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase">Results</a>
+    </nav>
+    <a href="#join" class="btn-accent" style="display:inline-flex;align-items:center;gap:8px;background:var(--ac);color:#0a0a0b;font-weight:800;font-size:13px;letter-spacing:.08em;text-transform:uppercase;padding:12px 20px;border-radius:2px;text-decoration:none">Join now</a>
+  </header>
+
+  <!-- HERO -->
+  <section id="top" style="position:relative;min-height:92vh;display:flex;align-items:flex-end;overflow:hidden">
+    <div class="img-slot" style="position:absolute;inset:0;width:100%;height:100%;background:#161619">Drop a hero photo — athletes mid-lift</div>
+    <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,10,11,.55) 0%,rgba(10,10,11,.25) 40%,rgba(10,10,11,.92) 100%)"></div>
+    <div style="position:absolute;inset:0;background:radial-gradient(120% 80% at 80% 10%,rgba(255,77,18,.22),transparent 55%)"></div>
+
+    <div style="position:relative;z-index:2;width:100%;max-width:1280px;margin:0 auto;padding:0 clamp(20px,5vw,64px) clamp(48px,7vw,96px)">
+      <div style="display:flex;align-items:center;gap:13px;margin-bottom:22px">
+        <span style="width:30px;height:3px;background:var(--ac)"></span>
+        <span style="font-size:13px;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:#cfcabf">Est. 2019 — Strength &amp; Conditioning</span>
+      </div>
+      <h1 style="margin:0;font-family:'Anton';font-weight:400;text-transform:uppercase;line-height:.9;letter-spacing:.005em;font-size:clamp(52px,10vw,148px)">
+        Become<br><span style="color:var(--ac)">Unbreakable</span>
+      </h1>
+      <p style="max-width:560px;margin:26px 0 0;font-size:clamp(16px,1.5vw,20px);line-height:1.55;color:#cbc6bc">
+        Barbell strength, brutal conditioning, and a room full of people who show up. 12,000 square feet of iron in the heart of the city.
+      </p>
+      <div style="display:flex;flex-wrap:wrap;gap:14px;margin-top:34px">
+        <a href="#join" class="btn-accent" style="display:inline-flex;align-items:center;gap:10px;background:var(--ac);color:#0a0a0b;font-weight:800;font-size:15px;letter-spacing:.04em;text-transform:uppercase;padding:17px 28px;border-radius:2px;text-decoration:none">Start a free week →</a>
+        <a href="#programs" class="btn-ghost" style="display:inline-flex;align-items:center;gap:10px;border:1px solid rgba(255,255,255,.28);color:#F4F1EC;background:transparent;font-weight:700;font-size:15px;letter-spacing:.04em;text-transform:uppercase;padding:17px 28px;border-radius:2px;text-decoration:none">Tour the gym</a>
+      </div>
+    </div>
+
+    <div style="position:absolute;right:clamp(16px,4vw,46px);bottom:clamp(40px,7vw,90px);z-index:2;display:flex;flex-direction:column;align-items:center;gap:10px">
+      <span style="writing-mode:vertical-rl;font-size:11px;font-weight:700;letter-spacing:.32em;text-transform:uppercase;color:#8b867d">Scroll</span>
+      <span style="width:1px;height:54px;background:linear-gradient(#8b867d,transparent);animation-name:bob;animation-duration:1.8s;animation-timing-function:ease-in-out;animation-iteration-count:infinite"></span>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div style="overflow:hidden;border-top:1px solid rgba(255,255,255,.08);border-bottom:1px solid rgba(255,255,255,.08);padding:20px 0;background:#0c0c0e">
+    <div style="display:flex;width:max-content;animation-name:mq;animation-duration:30s;animation-timing-function:linear;animation-iteration-count:infinite">
+      <span style="white-space:nowrap;padding-right:46px;font-family:'Anton';font-size:clamp(26px,3.6vw,42px);text-transform:uppercase;color:transparent;-webkit-text-stroke:1.2px rgba(244,241,236,.24);letter-spacing:.05em">No shortcuts · Just work · Earn your rest · Iron sharpens iron · Show up · </span>
+      <span style="white-space:nowrap;padding-right:46px;font-family:'Anton';font-size:clamp(26px,3.6vw,42px);text-transform:uppercase;color:transparent;-webkit-text-stroke:1.2px rgba(244,241,236,.24);letter-spacing:.05em">No shortcuts · Just work · Earn your rest · Iron sharpens iron · Show up · </span>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <section style="max-width:1280px;margin:0 auto;padding:clamp(48px,6vw,80px) clamp(20px,5vw,64px)">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:28px">
+      <div>
+        <div style="font-family:'Anton';font-size:clamp(40px,5vw,68px);line-height:1;color:var(--ac)">12K</div>
+        <div style="margin-top:8px;font-size:13px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:#908b83">Square feet of iron</div>
+      </div>
+      <div>
+        <div style="font-family:'Anton';font-size:clamp(40px,5vw,68px);line-height:1;color:var(--ac)">60+</div>
+        <div style="margin-top:8px;font-size:13px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:#908b83">Classes every week</div>
+      </div>
+      <div>
+        <div style="font-family:'Anton';font-size:clamp(40px,5vw,68px);line-height:1;color:var(--ac)">8</div>
+        <div style="margin-top:8px;font-size:13px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:#908b83">Certified coaches</div>
+      </div>
+      <div>
+        <div style="font-family:'Anton';font-size:clamp(40px,5vw,68px);line-height:1;color:var(--ac)">1,200</div>
+        <div style="margin-top:8px;font-size:13px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:#908b83">Members &amp; counting</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROGRAMS -->
+  <section id="programs" style="max-width:1280px;margin:0 auto;padding:clamp(40px,5vw,72px) clamp(20px,5vw,64px) clamp(56px,7vw,96px)">
+    <div style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:44px">
+      <div>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+          <span style="width:28px;height:3px;background:var(--ac)"></span>
+          <span style="font-size:13px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:#908b83">What we train</span>
+        </div>
+        <h2 style="margin:0;font-family:'Anton';font-weight:400;text-transform:uppercase;line-height:.92;letter-spacing:.01em;font-size:clamp(38px,5.5vw,76px)">Pick your<br>battleground</h2>
+      </div>
+      <p style="max-width:340px;margin:0;font-size:15px;line-height:1.6;color:#b0aba2">Four disciplines, one room. Mix them however your goals demand — every session is coached, every rep has a reason.</p>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(258px,1fr));gap:18px">
+      <div style="background:#141417;border:1px solid rgba(255,255,255,.08);border-radius:3px;overflow:hidden;display:flex;flex-direction:column">
+        <div class="img-slot" style="width:100%;height:188px;background:#d8d3ca">Strength photo</div>
+        <div style="padding:24px 22px 26px">
+          <div style="display:flex;align-items:baseline;gap:12px"><span style="font-family:'Anton';color:var(--ac);font-size:18px">01</span><h3 style="margin:0;font-family:'Anton';font-weight:400;text-transform:uppercase;font-size:24px;letter-spacing:.02em">Strength &amp; Power</h3></div>
+          <p style="margin:12px 0 16px;font-size:14px;line-height:1.6;color:#a8a399">Squat, bench, deadlift, press. Progressive barbell programming built to add plates, week over week.</p>
+          <span style="display:inline-block;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#cfcabf;border:1px solid rgba(255,255,255,.16);border-radius:2px;padding:6px 10px">Mon · Wed · Fri</span>
+        </div>
+      </div>
+      <div style="background:#141417;border:1px solid rgba(255,255,255,.08);border-radius:3px;overflow:hidden;display:flex;flex-direction:column">
+        <div class="img-slot" style="width:100%;height:188px;background:#d8d3ca">Conditioning photo</div>
+        <div style="padding:24px 22px 26px">
+          <div style="display:flex;align-items:baseline;gap:12px"><span style="font-family:'Anton';color:var(--ac);font-size:18px">02</span><h3 style="margin:0;font-family:'Anton';font-weight:400;text-transform:uppercase;font-size:24px;letter-spacing:.02em">Conditioning</h3></div>
+          <p style="margin:12px 0 16px;font-size:14px;line-height:1.6;color:#a8a399">Engine-building intervals on the bike, sled, and rower. Leave it all on the floor in 45 brutal minutes.</p>
+          <span style="display:inline-block;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#cfcabf;border:1px solid rgba(255,255,255,.16);border-radius:2px;padding:6px 10px">Tue · Thu · Sat</span>
+        </div>
+      </div>
+      <div style="background:#141417;border:1px solid rgba(255,255,255,.08);border-radius:3px;overflow:hidden;display:flex;flex-direction:column">
+        <div class="img-slot" style="width:100%;height:188px;background:#d8d3ca">Olympic lifting photo</div>
+        <div style="padding:24px 22px 26px">
+          <div style="display:flex;align-items:baseline;gap:12px"><span style="font-family:'Anton';color:var(--ac);font-size:18px">03</span><h3 style="margin:0;font-family:'Anton';font-weight:400;text-transform:uppercase;font-size:24px;letter-spacing:.02em">Olympic Lifting</h3></div>
+          <p style="margin:12px 0 16px;font-size:14px;line-height:1.6;color:#a8a399">Snatch and clean &amp; jerk technique, coached from the ground up. Explosive power, dialed-in precision.</p>
+          <span style="display:inline-block;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#cfcabf;border:1px solid rgba(255,255,255,.16);border-radius:2px;padding:6px 10px">Mon · Thu</span>
+        </div>
+      </div>
+      <div style="background:#141417;border:1px solid rgba(255,255,255,.08);border-radius:3px;overflow:hidden;display:flex;flex-direction:column">
+        <div class="img-slot" style="width:100%;height:188px;background:#d8d3ca">Mobility photo</div>
+        <div style="padding:24px 22px 26px">
+          <div style="display:flex;align-items:baseline;gap:12px"><span style="font-family:'Anton';color:var(--ac);font-size:18px">04</span><h3 style="margin:0;font-family:'Anton';font-weight:400;text-transform:uppercase;font-size:24px;letter-spacing:.02em">Mobility &amp; Recovery</h3></div>
+          <p style="margin:12px 0 16px;font-size:14px;line-height:1.6;color:#a8a399">Soft-tissue work, breathing, and structured stretching. The unsexy work that keeps you training for decades.</p>
+          <span style="display:inline-block;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#cfcabf;border:1px solid rgba(255,255,255,.16);border-radius:2px;padding:6px 10px">Sun</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COACHES -->
+  <section id="coaches" style="background:#0c0c0e;border-top:1px solid rgba(255,255,255,.07);border-bottom:1px solid rgba(255,255,255,.07)">
+    <div style="max-width:1280px;margin:0 auto;padding:clamp(56px,7vw,96px) clamp(20px,5vw,64px)">
+      <div style="text-align:center;margin-bottom:52px">
+        <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:16px">
+          <span style="width:28px;height:3px;background:var(--ac)"></span>
+          <span style="font-size:13px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:#908b83">The people in your corner</span>
+        </div>
+        <h2 style="margin:0;font-family:'Anton';font-weight:400;text-transform:uppercase;line-height:.92;font-size:clamp(38px,5.5vw,76px)">Meet the coaches</h2>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:36px;max-width:980px;margin:0 auto">
+        <div style="text-align:center;display:flex;flex-direction:column;align-items:center">
+          <div class="img-slot" style="width:168px;height:168px;background:#d8d3ca;border-radius:50%">Coach photo</div>
+          <h3 style="margin:22px 0 0;font-family:'Anton';font-weight:400;text-transform:uppercase;font-size:24px;letter-spacing:.02em">Marcus Cole</h3>
+          <div style="margin-top:6px;font-size:12px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--ac)">Powerlifting · Head Coach</div>
+          <p style="margin:14px 0 0;max-width:260px;font-size:14px;line-height:1.6;color:#a8a399">Three national records and a decade coaching lifters from first squat to first meet.</p>
+        </div>
+        <div style="text-align:center;display:flex;flex-direction:column;align-items:center">
+          <div class="img-slot" style="width:168px;height:168px;background:#d8d3ca;border-radius:50%">Coach photo</div>
+          <h3 style="margin:22px 0 0;font-family:'Anton';font-weight:400;text-transform:uppercase;font-size:24px;letter-spacing:.02em">Ria Okonkwo</h3>
+          <div style="margin-top:6px;font-size:12px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--ac)">Olympic Lifting</div>
+          <p style="margin:14px 0 0;max-width:260px;font-size:14px;line-height:1.6;color:#a8a399">Former national team lifter who turns raw athletes into technicians on the platform.</p>
+        </div>
+        <div style="text-align:center;display:flex;flex-direction:column;align-items:center">
+          <div class="img-slot" style="width:168px;height:168px;background:#d8d3ca;border-radius:50%">Coach photo</div>
+          <h3 style="margin:22px 0 0;font-family:'Anton';font-weight:400;text-transform:uppercase;font-size:24px;letter-spacing:.02em">Danny Voss</h3>
+          <div style="margin-top:6px;font-size:12px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--ac)">Conditioning</div>
+          <p style="margin:14px 0 0;max-width:260px;font-size:14px;line-height:1.6;color:#a8a399">Built engines for two pro rugby squads. Will find the gear you didn't know you had.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MEMBERSHIP -->
+  <section id="membership" style="max-width:1280px;margin:0 auto;padding:clamp(56px,7vw,96px) clamp(20px,5vw,64px)">
+    <div style="margin-bottom:48px">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+        <span style="width:28px;height:3px;background:var(--ac)"></span>
+        <span style="font-size:13px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:#908b83">No contracts, no nonsense</span>
+      </div>
+      <h2 style="margin:0;font-family:'Anton';font-weight:400;text-transform:uppercase;line-height:.92;font-size:clamp(38px,5.5vw,76px)">Membership</h2>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:18px;align-items:stretch">
+      <div style="background:#141417;border:1px solid rgba(255,255,255,.08);border-radius:3px;padding:34px 30px;display:flex;flex-direction:column">
+        <div style="font-size:12px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#908b83">Drop-In</div>
+        <div style="display:flex;align-items:baseline;gap:6px;margin:18px 0 4px"><span style="font-family:'Anton';font-size:56px;line-height:.9">$25</span><span style="font-size:14px;color:#908b83">/ day</span></div>
+        <p style="margin:6px 0 22px;font-size:14px;line-height:1.55;color:#a8a399">Visiting town or testing the waters. One full day, all access.</p>
+        <div style="display:flex;flex-direction:column;gap:11px;margin-bottom:28px">
+          <div style="display:flex;gap:10px;font-size:14px;color:#cbc6bc"><span style="color:var(--ac);font-weight:800">✓</span>Any single class</div>
+          <div style="display:flex;gap:10px;font-size:14px;color:#cbc6bc"><span style="color:var(--ac);font-weight:800">✓</span>Open gym access</div>
+          <div style="display:flex;gap:10px;font-size:14px;color:#cbc6bc"><span style="color:var(--ac);font-weight:800">✓</span>Locker &amp; towel</div>
+        </div>
+        <a href="#join" class="btn-ghost" style="margin-top:auto;text-align:center;border:1px solid rgba(255,255,255,.28);color:#F4F1EC;font-weight:700;font-size:14px;letter-spacing:.04em;text-transform:uppercase;padding:14px;border-radius:2px;text-decoration:none">Buy a day pass</a>
+      </div>
+
+      <div style="position:relative;background:#16100d;border:1.5px solid var(--ac);border-radius:3px;padding:34px 30px;display:flex;flex-direction:column;box-shadow:0 0 50px rgba(255,77,18,.14)">
+        <span style="position:absolute;top:-12px;left:30px;background:var(--ac);color:#0a0a0b;font-size:11px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;padding:5px 12px;border-radius:2px">Most popular</span>
+        <div style="font-size:12px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--ac)">The Forge</div>
+        <div style="display:flex;align-items:baseline;gap:6px;margin:18px 0 4px"><span style="font-family:'Anton';font-size:56px;line-height:.9">$129</span><span style="font-size:14px;color:#cbc6bc">/ month</span></div>
+        <p style="margin:6px 0 22px;font-size:14px;line-height:1.55;color:#cbc6bc">The full experience. Train as much as you want, every discipline included.</p>
+        <div style="display:flex;flex-direction:column;gap:11px;margin-bottom:28px">
+          <div style="display:flex;gap:10px;font-size:14px;color:#F4F1EC"><span style="color:var(--ac);font-weight:800">✓</span>Unlimited classes</div>
+          <div style="display:flex;gap:10px;font-size:14px;color:#F4F1EC"><span style="color:var(--ac);font-weight:800">✓</span>24/7 open gym access</div>
+          <div style="display:flex;gap:10px;font-size:14px;color:#F4F1EC"><span style="color:var(--ac);font-weight:800">✓</span>Custom training program</div>
+          <div style="display:flex;gap:10px;font-size:14px;color:#F4F1EC"><span style="color:var(--ac);font-weight:800">✓</span>InBody scan every month</div>
+        </div>
+        <a href="#join" class="btn-accent" style="margin-top:auto;text-align:center;background:var(--ac);color:#0a0a0b;font-weight:800;font-size:14px;letter-spacing:.04em;text-transform:uppercase;padding:15px;border-radius:2px;text-decoration:none">Start free week</a>
+      </div>
+
+      <div style="background:#141417;border:1px solid rgba(255,255,255,.08);border-radius:3px;padding:34px 30px;display:flex;flex-direction:column">
+        <div style="font-size:12px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#908b83">Iron Elite</div>
+        <div style="display:flex;align-items:baseline;gap:6px;margin:18px 0 4px"><span style="font-family:'Anton';font-size:56px;line-height:.9">$219</span><span style="font-size:14px;color:#908b83">/ month</span></div>
+        <p style="margin:6px 0 22px;font-size:14px;line-height:1.55;color:#a8a399">Everything in The Forge plus a coach in your corner, one on one.</p>
+        <div style="display:flex;flex-direction:column;gap:11px;margin-bottom:28px">
+          <div style="display:flex;gap:10px;font-size:14px;color:#cbc6bc"><span style="color:var(--ac);font-weight:800">✓</span>Everything in The Forge</div>
+          <div style="display:flex;gap:10px;font-size:14px;color:#cbc6bc"><span style="color:var(--ac);font-weight:800">✓</span>4 private sessions / month</div>
+          <div style="display:flex;gap:10px;font-size:14px;color:#cbc6bc"><span style="color:var(--ac);font-weight:800">✓</span>Nutrition coaching</div>
+          <div style="display:flex;gap:10px;font-size:14px;color:#cbc6bc"><span style="color:var(--ac);font-weight:800">✓</span>Priority class booking</div>
+        </div>
+        <a href="#join" class="btn-ghost" style="margin-top:auto;text-align:center;border:1px solid rgba(255,255,255,.28);color:#F4F1EC;font-weight:700;font-size:14px;letter-spacing:.04em;text-transform:uppercase;padding:14px;border-radius:2px;text-decoration:none">Go Elite</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESULTS -->
+  <section id="results" style="background:#0c0c0e;border-top:1px solid rgba(255,255,255,.07)">
+    <div style="max-width:1000px;margin:0 auto;padding:clamp(64px,8vw,120px) clamp(20px,5vw,64px);text-align:center">
+      <div style="font-family:'Anton';font-size:90px;line-height:.6;color:var(--ac);height:48px">&ldquo;</div>
+      <blockquote style="margin:0;font-family:'Anton';font-weight:400;text-transform:uppercase;line-height:1.02;letter-spacing:.01em;font-size:clamp(28px,4vw,54px)">
+        I walked in unable to deadlift the bar.<br>Two years later I pulled <span style="color:var(--ac)">double bodyweight.</span> This place changed what I think I'm capable of.
+      </blockquote>
+      <div style="margin-top:34px;display:flex;align-items:center;justify-content:center;gap:14px">
+        <span style="width:44px;height:44px;border-radius:50%;background:var(--ac);color:#0a0a0b;display:flex;align-items:center;justify-content:center;font-family:'Anton';font-size:18px">JT</span>
+        <div style="text-align:left">
+          <div style="font-weight:800;font-size:15px;letter-spacing:.02em">Jordan Tran</div>
+          <div style="font-size:12px;color:#908b83;letter-spacing:.06em">Member since 2021</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- JOIN CTA -->
+  <section id="join" style="position:relative;overflow:hidden;background:#0a0a0b">
+    <div style="position:absolute;inset:0;background:radial-gradient(90% 120% at 50% 0%,rgba(255,77,18,.28),transparent 60%)"></div>
+    <div style="position:relative;max-width:900px;margin:0 auto;padding:clamp(64px,8vw,120px) clamp(20px,5vw,64px);text-align:center">
+      <h2 style="margin:0;font-family:'Anton';font-weight:400;text-transform:uppercase;line-height:.9;font-size:clamp(46px,8vw,110px)">Your first<br>week is <span style="color:var(--ac)">on us</span></h2>
+      <p style="margin:22px auto 0;max-width:520px;font-size:17px;line-height:1.6;color:#cbc6bc">No card, no contract. Walk in, train with us for seven days, and decide for yourself.</p>
+      <form id="join-form" style="margin:36px auto 0;display:flex;flex-wrap:wrap;gap:12px;justify-content:center;max-width:520px">
+        <input type="email" required placeholder="your@email.com" class="email-input" style="flex:1;min-width:220px;background:#141417;border:1px solid rgba(255,255,255,.16);border-radius:2px;color:#F4F1EC;font-size:15px;padding:16px 18px;outline:none">
+        <button type="submit" class="btn-accent" style="background:var(--ac);color:#0a0a0b;font-weight:800;font-size:15px;letter-spacing:.04em;text-transform:uppercase;border:none;padding:16px 30px;border-radius:2px;cursor:pointer">Claim free week</button>
+      </form>
+      <div id="join-success" style="display:none;margin-top:18px;font-size:14px;font-weight:600;letter-spacing:.04em;color:var(--ac)">You're in. Check your inbox — we'll see you on the floor.</div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer style="background:#0c0c0e;border-top:1px solid rgba(255,255,255,.08)">
+    <div style="max-width:1280px;margin:0 auto;padding:clamp(48px,6vw,72px) clamp(20px,5vw,64px) 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:40px">
+      <div>
+        <div style="display:flex;align-items:center;gap:11px;margin-bottom:16px">
+          <span style="width:22px;height:22px;background:var(--ac);transform:rotate(45deg)"></span>
+          <span style="font-family:'Anton';font-size:24px;letter-spacing:.04em;text-transform:uppercase">The Forge</span>
+        </div>
+        <p style="margin:0;max-width:240px;font-size:14px;line-height:1.6;color:#908b83">Strength &amp; conditioning for people who'd rather earn it than fake it.</p>
+      </div>
+      <div>
+        <div style="font-size:12px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#605c55;margin-bottom:16px">Hours</div>
+        <div style="display:flex;flex-direction:column;gap:9px;font-size:14px;color:#b8b3aa">
+          <div style="display:flex;justify-content:space-between;gap:16px"><span>Mon – Fri</span><span style="color:#807b73">5a – 11p</span></div>
+          <div style="display:flex;justify-content:space-between;gap:16px"><span>Saturday</span><span style="color:#807b73">7a – 8p</span></div>
+          <div style="display:flex;justify-content:space-between;gap:16px"><span>Sunday</span><span style="color:#807b73">8a – 6p</span></div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:12px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#605c55;margin-bottom:16px">Find us</div>
+        <div style="display:flex;flex-direction:column;gap:9px;font-size:14px;color:#b8b3aa">
+          <span>214 Anvil Street</span>
+          <span>Eastside, Portland OR</span>
+          <span style="color:#807b73">hello@theforge.gym</span>
+          <span style="color:#807b73">(503) 555-0148</span>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:12px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#605c55;margin-bottom:16px">Follow</div>
+        <div style="display:flex;flex-direction:column;gap:9px;font-size:14px">
+          <a href="#top" class="foot-link">Instagram</a>
+          <a href="#top" class="foot-link">YouTube</a>
+          <a href="#top" class="foot-link">TikTok</a>
+        </div>
+      </div>
+    </div>
+    <div style="max-width:1280px;margin:0 auto;padding:40px clamp(20px,5vw,64px);margin-top:36px;border-top:1px solid rgba(255,255,255,.07);display:flex;flex-wrap:wrap;justify-content:space-between;gap:14px;font-size:12px;letter-spacing:.06em;color:#605c55;text-transform:uppercase">
+      <span>© 2026 The Forge Strength Co.</span>
+      <span>Built to break limits.</span>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+  // Free-week form (replacing DC onSubmit / sc-if submitted)
+  document.getElementById('join-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    document.getElementById('join-success').style.display = 'block';
+    this.reset();
+  });
+</script>
+</body>
+</html>
