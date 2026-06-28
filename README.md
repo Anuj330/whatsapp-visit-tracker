@@ -33,7 +33,9 @@ The API listens on `http://127.0.0.1:8000`. Interactive docs are at
 | Method | Path             | Description                                  |
 | ------ | ---------------- | -------------------------------------------- |
 | POST   | `/visits/check`  | Record a visit; reports if the user is new.  |
+| GET    | `/users`         | Dump every stored record with its regions.   |
 | GET    | `/users/{phone}` | Fetch a stored record + its regions (404 if missing). |
+| DELETE | `/users/{phone}` | Delete a number and its memberships (404 if missing). |
 | GET    | `/health`        | Liveness probe.                              |
 
 The **phone number is the key** (one record per number). Each call also passes
@@ -55,7 +57,7 @@ First call (new number):
 {
   "phone": "+14155550100",
   "is_returning": false,
-  "group_ids": ["north"],
+  "group_ids": "north",
   "first_seen_at": "2026-06-24T12:00:00+00:00",
   "last_seen_at": "2026-06-24T12:00:00+00:00",
   "visit_count": 1
@@ -64,13 +66,14 @@ First call (new number):
 
 Call it again with the same phone but a new `group_id` (e.g. `"south"`):
 `is_returning` becomes `true`, `visit_count` increments, `last_seen_at`
-advances, and the new region is added:
+advances, and the new region is added (`group_ids` is a comma-separated
+string):
 
 ```json
 {
   "phone": "+14155550100",
   "is_returning": true,
-  "group_ids": ["north", "south"],
+  "group_ids": "north,south",
   "first_seen_at": "2026-06-24T12:00:00+00:00",
   "last_seen_at": "2026-06-24T12:01:00+00:00",
   "visit_count": 2
@@ -79,6 +82,17 @@ advances, and the new region is added:
 
 Re-sending an existing (phone, group_id) pair is idempotent — the region list
 does not grow, but `visit_count` still increments.
+
+### Other endpoints
+
+```bash
+# Dump all saved data
+curl -s http://127.0.0.1:8000/users
+
+# Delete a number (and all its group memberships)
+curl -s -X DELETE http://127.0.0.1:8000/users/+14155550100
+# -> {"phone": "+14155550100", "deleted": true}   (404 if the number isn't stored)
+```
 
 Both writes (the user row and the group membership) run in one transaction,
 each via `INSERT ... ON CONFLICT`, so concurrent first-hits cannot

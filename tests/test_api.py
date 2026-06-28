@@ -38,7 +38,7 @@ def test_first_visit_is_new_number(client):
     body = resp.json()
     assert body["phone"] == "+15550100"
     assert body["is_returning"] is False
-    assert body["group_ids"] == ["g1"]
+    assert body["group_ids"] == "g1"
     assert body["visit_count"] == 1
     assert body["first_seen_at"] == body["last_seen_at"]
 
@@ -52,19 +52,19 @@ def test_second_visit_same_group_is_returning(client):
     body = resp.json()
     assert body["is_returning"] is True
     assert body["visit_count"] == 2
-    assert body["group_ids"] == ["g1"]
+    assert body["group_ids"] == "g1"
     assert body["last_seen_at"] >= body["first_seen_at"]
 
 
 def test_returning_accumulates_regions(client):
-    """A known number in a new group returns all regions it is saved to."""
+    """A known number in a new group returns all regions, comma-separated."""
     client.post("/visits/check", json={"phone": "15550100", "group_id": "g1"})
     resp = client.post(
         "/visits/check", json={"phone": "15550100", "group_id": "g2"}
     )
     body = resp.json()
     assert body["is_returning"] is True
-    assert body["group_ids"] == ["g1", "g2"]
+    assert body["group_ids"] == "g1,g2"
     assert body["visit_count"] == 2
 
 
@@ -76,8 +76,32 @@ def test_get_user_found_and_not_found(client):
     resp = client.get("/users/19999999")
     assert resp.status_code == 200
     body = resp.json()
-    assert body["group_ids"] == ["g1", "g2"]
+    assert body["group_ids"] == "g1,g2"
     assert body["visit_count"] == 2
+
+
+def test_list_users_returns_all(client):
+    """GET /users dumps every stored record with its regions."""
+    client.post("/visits/check", json={"phone": "111", "group_id": "g1"})
+    client.post("/visits/check", json={"phone": "222", "group_id": "g2"})
+    client.post("/visits/check", json={"phone": "222", "group_id": "g3"})
+    resp = client.get("/users")
+    assert resp.status_code == 200
+    rows = resp.json()
+    by_phone = {r["phone"]: r for r in rows}
+    assert by_phone["111"]["group_ids"] == "g1"
+    assert by_phone["222"]["group_ids"] == "g2,g3"
+
+
+def test_delete_user(client):
+    """DELETE /users/{phone} removes the number and its memberships."""
+    client.post("/visits/check", json={"phone": "333", "group_id": "g1"})
+    resp = client.delete("/users/333")
+    assert resp.status_code == 200
+    assert resp.json() == {"phone": "333", "deleted": True}
+    # Gone afterwards, and a second delete 404s.
+    assert client.get("/users/333").status_code == 404
+    assert client.delete("/users/333").status_code == 404
 
 
 def test_invalid_input_returns_422(client):

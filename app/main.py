@@ -10,6 +10,7 @@ from sqlmodel import Session, select
 
 from .db import get_session, init_db
 from .models import (
+    DeleteResponse,
     User,
     UserGroup,
     UserResponse,
@@ -38,12 +39,12 @@ def _as_utc(value: datetime) -> datetime:
     return value.replace(tzinfo=timezone.utc) if value.tzinfo is None else value
 
 
-def _group_ids_for(session: Session, phone: str) -> list[str]:
-    """Return the sorted list of group_ids (regions) a phone is saved to."""
+def _group_ids_for(session: Session, phone: str) -> str:
+    """Return a comma-separated string of the groups (regions) a phone is in."""
     rows = session.exec(
         select(UserGroup.group_id).where(UserGroup.phone == phone)
     ).all()
-    return sorted(rows)
+    return ",".join(sorted(rows))
 
 
 @app.get("/health")
@@ -119,6 +120,26 @@ def check_visit(
     )
 
 
+def _to_user_response(session: Session, user: User) -> UserResponse:
+    """Build a UserResponse, attaching the phone's comma-separated regions."""
+    return UserResponse(
+        phone=user.phone,
+        group_ids=_group_ids_for(session, user.phone),
+        first_seen_at=_as_utc(user.first_seen_at),
+        last_seen_at=_as_utc(user.last_seen_at),
+        visit_count=user.visit_count,
+    )
+
+
+@app.get("/users", response_model=list[UserResponse])
+def list_users(
+    session: Session = Depends(get_session),
+) -> list[UserResponse]:
+    """Return every stored user record with its regions (full data dump)."""
+    users = session.exec(select(User).order_by(User.phone)).all()
+    return [_to_user_response(session, user) for user in users]
+
+
 @app.get("/users/{phone}", response_model=UserResponse)
 def get_user(
     phone: str,
@@ -128,10 +149,23 @@ def get_user(
     user = session.get(User, phone)
     if user is None:
         raise HTTPException(status_code=404, detail="user not found")
-    return UserResponse(
-        phone=user.phone,
-        group_ids=_group_ids_for(session, phone),
-        first_seen_at=_as_utc(user.first_seen_at),
-        last_seen_at=_as_utc(user.last_seen_at),
-        visit_count=user.visit_count,
-    )
+    return _to_user_response(session, user)
+
+
+@app.delete("/users/{phone}", response_model=DeleteResponse)
+def delete_user(
+    phone: str,
+    session: Session = Depends(get_session),
+) -> DeleteResponse:
+    """Delete a phone number and all its group memberships, or 404 if absent."""
+    user = session.get(User, phone)
+    if user is None:
+        raise HTTPException(status_code=404, detail="user not found")
+    memberships = session.exec(
+        select(UserGroup).where(UserGroup.phone == phone)
+    ).all()
+    for membership in memberships:
+        session.delete(membership)
+    session.delete(user)
+    session.commit()
+    return DeleteResponse(phone=phone, deleted=True)

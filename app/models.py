@@ -84,10 +84,10 @@ class VisitCheckRequest(BaseModel):
 
 
 class UserResponse(BaseModel):
-    """Stored user record, returned by GET /users/{phone}."""
+    """Stored user record, returned by GET /users/{phone} and GET /users."""
 
     phone: str
-    group_ids: list[str]
+    group_ids: str  # comma-separated list of groups (regions), e.g. "g1,g2"
     first_seen_at: datetime
     last_seen_at: datetime
     visit_count: int
@@ -97,13 +97,20 @@ class VisitCheckResponse(BaseModel):
     """Response body for POST /visits/check.
 
     ``is_returning`` is false for a brand-new number and true if the phone was
-    already in the database. ``group_ids`` lists every group (region) the
-    number is currently saved to, including the one from this request.
+    already in the database. ``group_ids`` is a comma-separated string of every
+    group (region) the number is currently saved to, including this request's.
     """
 
     phone: str
     is_returning: bool
-    group_ids: list[str]
+    group_ids: str  # comma-separated list of groups (regions), e.g. "g1,g2"
     first_seen_at: datetime
     last_seen_at: datetime
     visit_count: int
+
+
+class DeleteResponse(BaseModel):
+    """Response body for DELETE /users/{phone}."""
+
+    phone: str
+    deleted: bool
