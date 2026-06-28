@@ -8,7 +8,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY app ./app
 
-EXPOSE 8080
+# Match Render's default web port so its port scan and EXPOSE agree.
+EXPOSE 10000
 
-# Render injects $PORT; fall back to 8080 for local `docker run`.
-CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8080}"]
+# Render injects $PORT (10000 by default); fall back to it for local runs too.
+CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-10000}"]
