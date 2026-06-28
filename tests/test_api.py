@@ -43,6 +43,26 @@ def test_first_visit_is_new_number(client):
     assert body["first_seen_at"] == body["last_seen_at"]
 
 
+def test_phone_only_registers_with_null_group(client):
+    """A phone-only call registers the number; group_ids is null."""
+    resp = client.post("/visits/check", json={"phone": "15550100"})
+    assert resp.status_code == 200
+    body = resp.json()
+    assert body["is_returning"] is False
+    assert body["group_ids"] is None
+    assert body["visit_count"] == 1
+
+
+def test_phone_only_acts_as_lookup_for_known_number(client):
+    """Calling phone-only after a grouped visit returns the saved groups."""
+    client.post("/visits/check", json={"phone": "15550100", "group_id": "g1"})
+    resp = client.post("/visits/check", json={"phone": "15550100"})
+    body = resp.json()
+    assert body["is_returning"] is True
+    assert body["group_ids"] == "g1"
+    assert body["visit_count"] == 2
+
+
 def test_second_visit_same_group_is_returning(client):
     """Re-sending the same phone+group is idempotent for the group list."""
     client.post("/visits/check", json={"phone": "15550100", "group_id": "g1"})
@@ -105,23 +125,22 @@ def test_delete_user(client):
 
 
 def test_invalid_input_returns_422(client):
-    """Empty/missing phone or group_id is rejected with 422."""
+    """An empty/missing phone is rejected; blank group_id is treated as none."""
+    # Blank phone -> 422.
     assert (
         client.post(
             "/visits/check", json={"phone": "   ", "group_id": "g1"}
         ).status_code
         == 422
     )
-    assert (
-        client.post(
-            "/visits/check", json={"phone": "15550100", "group_id": ""}
-        ).status_code
-        == 422
+    # Missing phone entirely -> 422.
+    assert client.post("/visits/check", json={}).status_code == 422
+    # Blank group_id is allowed (optional) and treated as no group.
+    resp = client.post(
+        "/visits/check", json={"phone": "15550100", "group_id": "  "}
     )
-    assert (
-        client.post("/visits/check", json={"phone": "15550100"}).status_code
-        == 422
-    )
+    assert resp.status_code == 200
+    assert resp.json()["group_ids"] is None
 
 
 def test_health(client):

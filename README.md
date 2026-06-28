@@ -38,12 +38,39 @@ The API listens on `http://127.0.0.1:8000`. Interactive docs are at
 | DELETE | `/users/{phone}` | Delete a number and its memberships (404 if missing). |
 | GET    | `/health`        | Liveness probe.                              |
 
-The **phone number is the key** (one record per number). Each call also passes
-a `group_id` (a region/group the number is seen in); a number accumulates every
-group it is sent with. The response reports whether the number is new or
-already saved, and lists all groups (regions) it is saved to.
+The **phone number is the key** (one record per number). `group_id` is
+**optional**, so `/visits/check` doubles as get-or-create:
+
+- **phone only** → look up / register the number (a pure read for known
+  numbers, or registers a new one). `group_ids` is `null` if no groups saved.
+- **phone + group_id** → also record that group (region). A number accumulates
+  every group it is sent with.
+
+The response reports whether the number is new or already saved, and lists all
+groups it is saved to (comma-separated string, or `null`).
 
 ### Example: POST /visits/check
+
+Phone only (get-or-create), here a brand-new number:
+
+```bash
+curl -s -X POST http://127.0.0.1:8000/visits/check \
+  -H "Content-Type: application/json" \
+  -d '{"phone": "+14155550100"}'
+```
+
+```json
+{
+  "phone": "+14155550100",
+  "is_returning": false,
+  "group_ids": null,
+  "first_seen_at": "2026-06-24T12:00:00+00:00",
+  "last_seen_at": "2026-06-24T12:00:00+00:00",
+  "visit_count": 1
+}
+```
+
+With a `group_id` to tag a region:
 
 ```bash
 curl -s -X POST http://127.0.0.1:8000/visits/check \
@@ -51,37 +78,21 @@ curl -s -X POST http://127.0.0.1:8000/visits/check \
   -d '{"phone": "+14155550100", "group_id": "north"}'
 ```
 
-First call (new number):
-
-```json
-{
-  "phone": "+14155550100",
-  "is_returning": false,
-  "group_ids": "north",
-  "first_seen_at": "2026-06-24T12:00:00+00:00",
-  "last_seen_at": "2026-06-24T12:00:00+00:00",
-  "visit_count": 1
-}
-```
-
-Call it again with the same phone but a new `group_id` (e.g. `"south"`):
-`is_returning` becomes `true`, `visit_count` increments, `last_seen_at`
-advances, and the new region is added (`group_ids` is a comma-separated
-string):
-
 ```json
 {
   "phone": "+14155550100",
   "is_returning": true,
-  "group_ids": "north,south",
+  "group_ids": "north",
   "first_seen_at": "2026-06-24T12:00:00+00:00",
-  "last_seen_at": "2026-06-24T12:01:00+00:00",
+  "last_seen_at": "2026-06-24T12:00:30+00:00",
   "visit_count": 2
 }
 ```
 
-Re-sending an existing (phone, group_id) pair is idempotent — the region list
-does not grow, but `visit_count` still increments.
+Sending another new `group_id` (e.g. `"south"`) accumulates it, so `group_ids`
+becomes `"north,south"`. Re-sending an existing (phone, group_id) pair is
+idempotent — the region list does not grow, but `visit_count` still increments
+on every call (phone-only calls included).
 
 ### Other endpoints
 
@@ -97,8 +108,8 @@ curl -s -X DELETE http://127.0.0.1:8000/users/+14155550100
 Both writes (the user row and the group membership) run in one transaction,
 each via `INSERT ... ON CONFLICT`, so concurrent first-hits cannot
 double-create rows. `phone` is normalized (whitespace stripped, one leading
-`+` kept). `phone` and `group_id` must both be non-empty strings, else the
-request yields a `422`.
+`+` kept) and must be a non-empty string, else the request yields a `422`.
+`group_id` is optional; a missing or blank value is treated as "no group".
 
 ## Tests
 

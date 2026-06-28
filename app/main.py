@@ -39,12 +39,15 @@ def _as_utc(value: datetime) -> datetime:
     return value.replace(tzinfo=timezone.utc) if value.tzinfo is None else value
 
 
-def _group_ids_for(session: Session, phone: str) -> str:
-    """Return a comma-separated string of the groups (regions) a phone is in."""
+def _group_ids_for(session: Session, phone: str) -> str | None:
+    """Return the groups (regions) a phone is in as a comma-separated string.
+
+    Returns None when the phone has no groups saved.
+    """
     rows = session.exec(
         select(UserGroup.group_id).where(UserGroup.phone == phone)
     ).all()
-    return ",".join(sorted(rows))
+    return ",".join(sorted(rows)) if rows else None
 
 
 @app.get("/health")
@@ -58,15 +61,16 @@ def check_visit(
     payload: VisitCheckRequest,
     session: Session = Depends(get_session),
 ) -> VisitCheckResponse:
-    """Record a visit for a phone number and the group it came from.
+    """Look up or register a phone number, optionally tagging a group.
 
-    The phone is the key (one row per number). On first contact the number is
-    inserted (is_returning=false); otherwise visit_count is incremented and
-    last_seen_at refreshed (is_returning=true). The group_id from this request
-    is added to the number's set of groups (regions). Both writes happen in one
-    transaction, and each uses INSERT ... ON CONFLICT so concurrent first-hits
-    cannot double-create rows. The response lists every region the number is
-    saved to.
+    Acts as a combined get-or-create: the phone is the key (one row per
+    number). On first contact the number is inserted (is_returning=false);
+    otherwise visit_count is incremented and last_seen_at refreshed
+    (is_returning=true). group_id is optional — when provided it is added to the
+    number's set of groups (regions); when omitted the call is a pure
+    lookup/register. Writes happen in one transaction, each via
+    INSERT ... ON CONFLICT so concurrent first-hits cannot double-create rows.
+    The response lists every region the number is saved to, or null if none.
     """
     now = _utcnow()
     # Pick the dialect-specific INSERT so ON CONFLICT works on both the
@@ -98,13 +102,18 @@ def check_visit(
     )
     user_row = session.exec(user_stmt).one()
 
-    # 2. Record this (phone, group_id) membership idempotently.
-    group_stmt = (
-        insert(UserGroup)
-        .values(phone=payload.phone, group_id=payload.group_id, created_at=now)
-        .on_conflict_do_nothing(index_elements=["phone", "group_id"])
-    )
-    session.exec(group_stmt)
+    # 2. Record this (phone, group_id) membership idempotently, if one was sent.
+    if payload.group_id is not None:
+        group_stmt = (
+            insert(UserGroup)
+            .values(
+                phone=payload.phone,
+                group_id=payload.group_id,
+                created_at=now,
+            )
+            .on_conflict_do_nothing(index_elements=["phone", "group_id"])
+        )
+        session.exec(group_stmt)
 
     group_ids = _group_ids_for(session, payload.phone)
     session.commit()

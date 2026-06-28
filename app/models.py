@@ -54,21 +54,28 @@ def _normalize_phone(value: object) -> str:
     return ("+" + digits) if has_plus else digits
 
 
-def _normalize_group_id(value: object) -> str:
-    """Validate group_id as a non-empty string and strip surrounding space."""
+def _normalize_group_id(value: object) -> str | None:
+    """Normalize an optional group_id.
+
+    Returns None when the value is absent or blank (group_id is optional), so a
+    phone-only request acts as a lookup. A non-string value is rejected (422).
+    """
+    if value is None:
+        return None
     if not isinstance(value, str):
-        raise ValueError("group_id must be a string")
-    cleaned = value.strip()
-    if not cleaned:
-        raise ValueError("group_id must be a non-empty string")
-    return cleaned
+        raise ValueError("group_id must be a string if provided")
+    return value.strip() or None
 
 
 class VisitCheckRequest(BaseModel):
-    """Request body for POST /visits/check."""
+    """Request body for POST /visits/check.
+
+    ``group_id`` is optional: send phone-only to look up / register a number,
+    or include a group_id to also record that group (region).
+    """
 
     phone: str
-    group_id: str
+    group_id: str | None = None
 
     @field_validator("phone", mode="before")
     @classmethod
@@ -78,8 +85,8 @@ class VisitCheckRequest(BaseModel):
 
     @field_validator("group_id", mode="before")
     @classmethod
-    def validate_group_id(cls, value: object) -> str:
-        """Validate and normalize the incoming group id."""
+    def validate_group_id(cls, value: object) -> str | None:
+        """Validate and normalize the optional group id."""
         return _normalize_group_id(value)
 
 
@@ -87,7 +94,8 @@ class UserResponse(BaseModel):
     """Stored user record, returned by GET /users/{phone} and GET /users."""
 
     phone: str
-    group_ids: str  # comma-separated list of groups (regions), e.g. "g1,g2"
+    # Comma-separated groups (regions), e.g. "g1,g2"; null if none are saved.
+    group_ids: str | None
     first_seen_at: datetime
     last_seen_at: datetime
     visit_count: int
@@ -98,12 +106,12 @@ class VisitCheckResponse(BaseModel):
 
     ``is_returning`` is false for a brand-new number and true if the phone was
     already in the database. ``group_ids`` is a comma-separated string of every
-    group (region) the number is currently saved to, including this request's.
+    group (region) the number is saved to, or null if none are saved yet.
     """
 
     phone: str
     is_returning: bool
-    group_ids: str  # comma-separated list of groups (regions), e.g. "g1,g2"
+    group_ids: str | None
     first_seen_at: datetime
     last_seen_at: datetime
     visit_count: int
