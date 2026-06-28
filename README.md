@@ -33,37 +33,58 @@ The API listens on `http://127.0.0.1:8000`. Interactive docs are at
 | Method | Path             | Description                                  |
 | ------ | ---------------- | -------------------------------------------- |
 | POST   | `/visits/check`  | Record a visit; reports if the user is new.  |
-| GET    | `/users/{phone}` | Fetch a stored user record (404 if missing). |
+| GET    | `/users/{phone}` | Fetch a stored record + its regions (404 if missing). |
 | GET    | `/health`        | Liveness probe.                              |
+
+The **phone number is the key** (one record per number). Each call also passes
+a `group_id` (a region/group the number is seen in); a number accumulates every
+group it is sent with. The response reports whether the number is new or
+already saved, and lists all groups (regions) it is saved to.
 
 ### Example: POST /visits/check
 
 ```bash
 curl -s -X POST http://127.0.0.1:8000/visits/check \
   -H "Content-Type: application/json" \
-  -d '{"phone": "+14155550100"}'
+  -d '{"phone": "+14155550100", "group_id": "north"}'
 ```
 
-First call:
+First call (new number):
 
 ```json
 {
   "phone": "+14155550100",
   "is_returning": false,
-  "first_seen_at": "2026-06-23T12:00:00+00:00",
-  "last_seen_at": "2026-06-23T12:00:00+00:00",
+  "group_ids": ["north"],
+  "first_seen_at": "2026-06-24T12:00:00+00:00",
+  "last_seen_at": "2026-06-24T12:00:00+00:00",
   "visit_count": 1
 }
 ```
 
-Call it again with the same phone and `is_returning` becomes `true`,
-`visit_count` increments, and `last_seen_at` advances.
+Call it again with the same phone but a new `group_id` (e.g. `"south"`):
+`is_returning` becomes `true`, `visit_count` increments, `last_seen_at`
+advances, and the new region is added:
 
-The write is performed as a single `INSERT ... ON CONFLICT DO UPDATE`, so two
-simultaneous first-hits from the same number cannot double-create the row.
+```json
+{
+  "phone": "+14155550100",
+  "is_returning": true,
+  "group_ids": ["north", "south"],
+  "first_seen_at": "2026-06-24T12:00:00+00:00",
+  "last_seen_at": "2026-06-24T12:01:00+00:00",
+  "visit_count": 2
+}
+```
 
-The `phone` field is normalized: whitespace is stripped and a single leading
-`+` is preserved. An empty or non-string `phone` yields a `422` response.
+Re-sending an existing (phone, group_id) pair is idempotent — the region list
+does not grow, but `visit_count` still increments.
+
+Both writes (the user row and the group membership) run in one transaction,
+each via `INSERT ... ON CONFLICT`, so concurrent first-hits cannot
+double-create rows. `phone` is normalized (whitespace stripped, one leading
+`+` kept). `phone` and `group_id` must both be non-empty strings, else the
+request yields a `422`.
 
 ## Tests
 
